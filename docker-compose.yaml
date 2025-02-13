@@ -1,5 +1,3 @@
-version: "3.9"
-
 networks:
   diligent:
     driver: bridge
@@ -8,7 +6,7 @@ services:
   prometheus:
     image: prom/prometheus:v2.36.0
     ports:
-      - "9090:9090"
+      - "19090:9090"
     volumes:
       - ./docker-compose-files/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
     networks:
@@ -17,7 +15,7 @@ services:
   grafana:
     image: grafana/grafana:8.5.4
     ports:
-      - "3000:3000"
+      - "13000:3000"
     volumes:
       - ./docker-compose-files/grafana/provisioning:/etc/grafana/provisioning
       - ./docker-compose-files/grafana/dashboards:/grafana/dashboards

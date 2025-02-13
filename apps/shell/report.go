@@ -3,20 +3,21 @@ package main
 import (
 	"context"
 	"fmt"
-	"github.com/desertbit/grumble"
-	"github.com/flipkart-incubator/diligent/pkg/proto"
-	"github.com/go-echarts/go-echarts/v2/charts"
-	"github.com/go-echarts/go-echarts/v2/components"
-	"github.com/go-echarts/go-echarts/v2/opts"
-	"github.com/prometheus/client_golang/api"
-	"github.com/prometheus/client_golang/api/prometheus/v1"
-	"github.com/prometheus/common/model"
 	"io"
 	"math"
 	"os"
 	"strings"
 	"text/template"
 	"time"
+
+	"github.com/desertbit/grumble"
+	"github.com/flipkart-incubator/diligent/pkg/proto"
+	"github.com/go-echarts/go-echarts/v2/charts"
+	"github.com/go-echarts/go-echarts/v2/components"
+	"github.com/go-echarts/go-echarts/v2/opts"
+	"github.com/prometheus/client_golang/api"
+	v1 "github.com/prometheus/client_golang/api/prometheus/v1"
+	"github.com/prometheus/common/model"
 )
 
 func init() {
@@ -296,11 +297,16 @@ func saveReport(c *grumble.Context, chs []components.Charter, fileName string) e
 	if err != nil {
 		return err
 	}
+	defer f.Close()
 	err = page.Render(io.MultiWriter(f))
 	if err != nil {
 		return err
 	}
-	c.App.Printf("Report saved: %s\n", fileName)
+	st, err := f.Stat()
+	if err != nil {
+		return err
+	}
+	c.App.Printf("Report size: %d, saved as %s\n", st.Size(), fileName)
 	return nil
 }
 
